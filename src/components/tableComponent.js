@@ -38,7 +38,8 @@ class TableComponent extends React.Component {
   };
 
   componentDidMount() {
-    this.props.getCurrencies();
+    const { currency } = this.state;
+    this.props.getCurrencies({ convert: currency });
   }
 
   componentWillReceiveProps(props) {
