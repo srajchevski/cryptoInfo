@@ -82,13 +82,13 @@ class DetailsModal extends React.Component {
             Market cap: {quote && quote.market_cap}
           </Typography>
           <Typography className={classes.label} gutterBottom>
-            Hourly % change: {quote && quote.percent_change_1h}
+            Hourly % change: {quote && quote.percent_change_1h} %
           </Typography>
           <Typography className={classes.label} gutterBottom>
-            Daily % change: {quote && quote.percent_change_24h}
+            Daily % change: {quote && quote.percent_change_24h} %
           </Typography>
           <Typography className={classes.label} gutterBottom>
-            Weekly % change: {quote && quote.percent_change_7d}
+            Weekly % change: {quote && quote.percent_change_7d} %
           </Typography>
           <Typography className={classes.label} gutterBottom>
             Last updated:{" "}

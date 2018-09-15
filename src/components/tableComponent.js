@@ -34,12 +34,18 @@ class TableComponent extends React.Component {
   state = {
     currency: USD,
     isDetailsModalOpen: false,
-    activeRow: null
+    activeRow: null,
+    page: 0,
+    rowsPerPage: 10
   };
 
   componentDidMount() {
-    const { currency } = this.state;
-    this.props.getCurrencies({ convert: currency });
+    const { currency, page, rowsPerPage } = this.state;
+    this.props.getCurrencies({
+      start: page * rowsPerPage + 1,
+      limit: rowsPerPage,
+      convert: currency
+    });
   }
 
   componentWillReceiveProps(props) {
@@ -53,6 +59,26 @@ class TableComponent extends React.Component {
     }
   }
 
+  changePage = page => {
+    const { rowsPerPage, currency } = this.state;
+    this.props.getCurrencies({
+      start: page * rowsPerPage + 1,
+      limit: rowsPerPage,
+      convert: currency
+    });
+    this.setState({ page });
+  };
+
+  changeRowsPerPage = rowsPerPage => {
+    const { currency } = this.state;
+    this.props.getCurrencies({
+      start: 1,
+      limit: rowsPerPage,
+      convert: currency
+    });
+    this.setState({ page: 0, rowsPerPage });
+  };
+
   openDetailsModal = activeRow => {
     this.setState({ activeRow, isDetailsModalOpen: true });
   };
@@ -62,14 +88,25 @@ class TableComponent extends React.Component {
   };
 
   changeCurrency = event => {
+    const { page, rowsPerPage } = this.state;
     const currency = event.target.value;
+    this.props.getCurrencies({
+      start: page * rowsPerPage + 1,
+      limit: rowsPerPage,
+      convert: currency
+    });
     this.setState({ currency });
-    this.props.getCurrencies({ convert: currency });
   };
 
   render() {
     const { classes } = this.props;
-    const { currency, activeRow, isDetailsModalOpen } = this.state;
+    const {
+      currency,
+      page,
+      rowsPerPage,
+      activeRow,
+      isDetailsModalOpen
+    } = this.state;
 
     return (
       <div className={classes.root}>
@@ -101,6 +138,10 @@ class TableComponent extends React.Component {
         </TextField>
         <CurrencyTable
           currency={currency}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          changePage={this.changePage}
+          changeRowsPerPage={this.changeRowsPerPage}
           openDetailsModal={this.openDetailsModal}
         />
         {activeRow && (

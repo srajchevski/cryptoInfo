@@ -127,20 +127,18 @@ const styles = theme => ({
 });
 
 class CustomPaginationActionsTable extends React.Component {
-  state = {
-    isViewModalOpen: false,
-    page: 0,
-    rowsPerPage: 10
-  };
-
-  componentDidMount() {}
+  // state = {
+  //   isViewModalOpen: false,
+  //   page: 0,
+  //   rowsPerPage: 10
+  // };
 
   handleChangePage = (event, page) => {
-    this.setState({ page });
+    this.props.changePage(page);
   };
 
   handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value });
+    this.props.changeRowsPerPage(event.target.value);
   };
 
   openDetailsModal = row => {
@@ -174,11 +172,10 @@ class CustomPaginationActionsTable extends React.Component {
   };
 
   render() {
-    const { classes, currencies } = this.props;
-    const { rowsPerPage, page } = this.state;
-    const emptyRows =
-      rowsPerPage -
-      Math.min(rowsPerPage, currencies.length - page * rowsPerPage);
+    const { classes, currencies, page, rowsPerPage } = this.props;
+    // const { rowsPerPage, page } = this.state;
+    const emptyRows = rowsPerPage - currencies.length;
+    // Math.min(rowsPerPage, currencies.length - page * rowsPerPage);
 
     return (
       <Paper className={classes.root}>
@@ -197,9 +194,9 @@ class CustomPaginationActionsTable extends React.Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {currencies
-                .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
-                .map(this.mapTableRow)}
+              {currencies.map(this.mapTableRow)
+              // .slice(page*rowsPerPage, (page+1)*rowsPerPage)
+              }
               {emptyRows > 0 && (
                 <TableRow style={{ height: 48 * emptyRows }}>
                   <TableCell colSpan={6} />
@@ -210,7 +207,7 @@ class CustomPaginationActionsTable extends React.Component {
               <TableRow>
                 <TablePagination
                   colSpan={6}
-                  count={currencies.length}
+                  count={100}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onChangePage={this.handleChangePage}
